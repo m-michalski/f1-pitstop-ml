@@ -6,8 +6,10 @@ print(f'Shape of the data: {data.shape}\n')
 X = data[1:,:-1]
 y = data[1:,-1]
 
+classes, counts = np.unique(y[:,], return_counts=True)
+
 print(f'Nr of samples: {(X.shape)[0]}\nNr of features: {(X.shape)[1]}')
-print(f'Nr of labels: {(y.shape)[0]}')
+print(f'Nr of classes: {(y.shape)[0]}\nUnique classes:\n{(classes[0], counts[0])}\n{(classes[1], counts[1])}')
 
 drivers = np.unique(X[:,1])
 compounds = np.unique(X[:,2])
