@@ -1,5 +1,5 @@
 import numpy as np
-from transform import transform as trn
+from sklearn.preprocessing import OneHotEncoder
 
 data = np.loadtxt("data/train.csv", dtype="object", delimiter=",")
 print(f'Shape of the data: {data.shape}\n')
@@ -16,8 +16,6 @@ drivers = np.unique(X[:,1])
 compounds = np.unique(X[:,2])
 races = np.unique(X[:,3])
 years = np.unique(X[:,4])
-
-#trn.count_unique(drivers,"drivers")
 
 print(f'Nr of unique drivers: {(drivers.shape)[0]}\nUnique drivers:\n{drivers}\n')
 print(f'Nr of unique compounds: {(compounds.shape)[0]}\nUnique compounds:\n{compounds}\n')
