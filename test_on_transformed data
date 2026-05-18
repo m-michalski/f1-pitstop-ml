@@ -29,8 +29,8 @@ RSKF = RepeatedKFold(n_repeats=5, n_splits=2)
 
 data = np.loadtxt("data_transformed/train.csv", dtype="object", delimiter=",")
 
-X = data[1:,:-1]
-y = data[1:,-1]
+X = data[1:,:-1].astype(float)
+y = data[1:,-1].astype(float)
 
 for c, classificators in enumerate(clfs):
     for j, (train_index, test_index) in enumerate(RSKF.split(X, y)):
