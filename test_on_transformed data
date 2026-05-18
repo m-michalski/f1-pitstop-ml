@@ -27,11 +27,10 @@ types = ["GBN", "KNN", "DTC"]
 
 RSKF = RepeatedKFold(n_repeats=5, n_splits=2)
 
-data = np.loadtxt("data/train.csv", dtype="object", delimiter=",")
-print(f'Shape of the data: {data.shape}\n')
+X, y = make_classification(n_samples = 5000, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=2, weights=[0.999, 0.001])
 
-X = data[1:,:-1]
-y = data[1:,-1]
+#X = data[1:,:-1]
+#y = data[1:,-1]
 
 for c, classificators in enumerate(clfs):
     for j, (train_index, test_index) in enumerate(RSKF.split(X, y)):
@@ -57,12 +56,11 @@ metrics = [
     ("Recall",            accuracy_recll),
 ]
 
+rows = []
 for metric_name, metric_array in metrics:
-    rows = []
-    row = [" "]
+    row = [metric_name]
     for r in range(len(clfs)):
-        row.append(np.mean(metric_array[r, :, 0, i]))
+        row.append(np.mean(metric_array[r, :, 0]))
     rows.append(row)
 
-    print(f"\n{metric_name}")
-    print(tabulate(rows, headers=headers_mean, tablefmt="plain"))
+print(f'\n{tabulate(rows, headers=headers_mean, tablefmt="plain")}')
