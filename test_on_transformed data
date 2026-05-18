@@ -27,10 +27,10 @@ types = ["GBN", "KNN", "DTC"]
 
 RSKF = RepeatedKFold(n_repeats=5, n_splits=2)
 
-X, y = make_classification(n_samples = 50000, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=2)
+data = np.loadtxt("data_transformed/train.csv", dtype="object", delimiter=",")
 
-#X = data[1:,:-1]
-#y = data[1:,-1]
+X = data[1:,:-1]
+y = data[1:,-1]
 
 for c, classificators in enumerate(clfs):
     for j, (train_index, test_index) in enumerate(RSKF.split(X, y)):
