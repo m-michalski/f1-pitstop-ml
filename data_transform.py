@@ -7,8 +7,10 @@ data = np.loadtxt("data/train.csv", dtype="object", delimiter=",")
 print(data)
 
 train_X = pd.DataFrame(data[1:,:-1], columns=data[0,:-1])
+train_y = data[1:,-1].reshape(-1,1)
+train_y = train_y.astype(float)
 
-print(train_X)
+#print(train_y)
 
 encoder=OneHotEncoder(sparse_output=False)
 
@@ -27,4 +29,10 @@ train_X.drop(['Driver'] ,axis=1, inplace=True)
 
 train_X = train_X.astype(float)
 
-print(train_X)
+#print(train_X)
+
+transformed_data = np.column_stack((train_X, train_y))
+
+#print(transformed_data)
+
+np.savetxt("data_transformed/train.csv", transformed_data, delimiter=",", header=",".join(list(train_X.columns) + ["PitNextLap"]), comments="")
