@@ -1,0 +1,74 @@
+import numpy as np
+from sklearn.metrics import balanced_accuracy_score
+from sklearn.model_selection import RepeatedKFold
+from sklearn.naive_bayes import GaussianNB
+from sklearn.datasets import make_classification
+from imblearn.over_sampling import RandomOverSampler
+from imblearn.under_sampling import RandomUnderSampler
+from imblearn.over_sampling import SMOTE
+from sklearn.metrics import f1_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+from tabulate import tabulate
+from sklearn.tree import  DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+
+
+
+databases = [make_classification(n_samples = 5000, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=2, weights=[0.9, 0.1]),
+             make_classification(n_samples = 5000, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=2, weights=[0.99, 0.01]),
+             make_classification(n_samples = 5000, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=2, weights=[0.999, 0.001])
+             ]
+
+clfs = [GaussianNB()]
+
+accuracy_bas = np.full(shape=(3, 10, 4, 3), fill_value=np.nan)
+accuracy_f1 = np.full(shape=(3, 10, 4, 3), fill_value=np.nan)
+accuracy_prec = np.full(shape=(3, 10, 4, 3), fill_value=np.nan)
+accuracy_recll = np.full(shape=(3, 10, 4, 3), fill_value=np.nan)
+
+clfs = [GaussianNB(), 
+        KNeighborsClassifier(n_neighbors=5),
+        DecisionTreeClassifier()]
+
+name = ["0", "1", "2"]
+types = ["GBN", "KNN", "DTC"]
+
+RSKF = RepeatedKFold(n_repeats=5, n_splits=2)
+
+for i in range(3):
+    X, y = databases[i]
+    for c, classificators in enumerate(clfs):
+        for j, (train_index, test_index) in enumerate(RSKF.split(X, y)):
+            X_train = X[train_index]
+            y_train = y[train_index]
+            X_test = X[test_index]
+            y_test = y[test_index]
+
+            classificator = clfs[c]
+            classificator = classificator.fit(X_train, y_train)
+            predict = classificator.predict(X_test)
+            accuracy_bas[c, j, 0, i] = balanced_accuracy_score(y_test, predict)
+            accuracy_f1[c, j, 0, i] = f1_score(y_test, predict)
+            accuracy_prec[c, j, 0, i] = precision_score(y_test, predict)
+            accuracy_recll[c, j, 0, i] = recall_score(y_test, predict)
+
+headers_mean = ["GBN", "KNN", "DTC"]
+
+metrics = [
+    ("F1 Score",          accuracy_f1),
+    ("Balanced Accuracy", accuracy_bas),
+    ("Precision",         accuracy_prec),
+    ("Recall",            accuracy_recll),
+]
+
+for metric_name, metric_array in metrics:
+    rows = []
+    for i in range(len(databases)):
+        row = [name[i]]
+        for r in range(len(clfs)):
+            row.append(np.mean(metric_array[r, :, 0, i]))
+        rows.append(row)
+
+    print(f"\n{metric_name}")
+    print(tabulate(rows, headers=headers_mean, tablefmt="plain"))

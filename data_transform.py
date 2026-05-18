@@ -17,13 +17,13 @@ compounds = np.unique(X[:,2])
 races = np.unique(X[:,3])
 years = np.unique(X[:,4])
 
-#print(f'Nr of unique drivers: {(drivers.shape)[0]}\nUnique drivers:\n{drivers}\n')
-#print(f'Nr of unique compounds: {(compounds.shape)[0]}\nUnique compounds:\n{compounds}\n')
+print(f'Nr of unique drivers: {(drivers.shape)[0]}\nUnique drivers:\n{drivers}\n')
+print(f'Nr of unique compounds: {(compounds.shape)[0]}\nUnique compounds:\n{compounds}\n')
 print(f'Nr of unique races: {(races.shape)[0]}\nUnique races:\n{races}\n')
-#print(f'Nr of unique years: {(years.shape)[0]}\nUnique years:\n{years}\n')
+print(f'Nr of unique years: {(years.shape)[0]}\nUnique years:\n{years}\n')
 
 X_float = X[:,5:].astype(dtype="float")
 
-test = label_binarize(drivers, classes=drivers)
+test = label_binarize(compounds, classes=compounds)
 
 print(test[1:5])
