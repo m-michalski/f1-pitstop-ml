@@ -13,12 +13,7 @@ from tabulate import tabulate
 from sklearn.tree import  DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 
-
-
-databases = [make_classification(n_samples = 5000, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=2, weights=[0.9, 0.1]),
-             make_classification(n_samples = 5000, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=2, weights=[0.99, 0.01]),
-             make_classification(n_samples = 5000, n_features=2, n_informative=2, n_redundant=0, n_repeated=0, n_classes=2, weights=[0.999, 0.001])
-             ]
+databases = []
 
 clfs = [GaussianNB()]
 
@@ -31,7 +26,7 @@ clfs = [GaussianNB(),
         KNeighborsClassifier(n_neighbors=5),
         DecisionTreeClassifier()]
 
-name = ["0", "1", "2"]
+name = [""]
 types = ["GBN", "KNN", "DTC"]
 
 RSKF = RepeatedKFold(n_repeats=5, n_splits=2)
@@ -65,7 +60,7 @@ metrics = [
 for metric_name, metric_array in metrics:
     rows = []
     for i in range(len(databases)):
-        row = [name[i]]
+        row = [" "]
         for r in range(len(clfs)):
             row.append(np.mean(metric_array[r, :, 0, i]))
         rows.append(row)
