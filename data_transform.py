@@ -22,4 +22,9 @@ for i in range(len(columns_to_change)):
     OH_X_train= pd.concat([train_X, train_X_encoded ], axis=1)
     train_X = OH_X_train
 
+train_X.drop(['id'] ,axis=1, inplace=True)
+train_X.drop(['Driver'] ,axis=1, inplace=True)
+
+train_X = train_X.astype(float)
+
 print(train_X)
