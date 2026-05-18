@@ -12,12 +12,14 @@ print(train_X)
 
 encoder=OneHotEncoder(sparse_output=False)
 
-train_X_encoded = pd.DataFrame (encoder.fit_transform(train_X[['Compound']]))
+columns_to_change = ['Compound', 'Race', 'Year']
 
-train_X_encoded.columns = encoder.get_feature_names_out(['Compound'])
+for i in range(len(columns_to_change)):
+    
+    train_X_encoded = pd.DataFrame (encoder.fit_transform(train_X[[f'{columns_to_change[i]}']]))
+    train_X_encoded.columns = encoder.get_feature_names_out([f'{columns_to_change[i]}'])
+    train_X.drop([f'{columns_to_change[i]}'] ,axis=1, inplace=True)
+    OH_X_train= pd.concat([train_X, train_X_encoded ], axis=1)
+    train_X = OH_X_train
 
-train_X.drop(['Compound'] ,axis=1, inplace=True)
-
-OH_X_train= pd.concat([train_X, train_X_encoded ], axis=1)
-
-print(OH_X_train)
+print(train_X)
